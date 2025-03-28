@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.common.DateSelector
 import com.nanit.babybirthday.ui.common.OverlappingCircularImagesOn45Degrees
@@ -37,6 +38,8 @@ fun DetailsPage(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        Text(stringResource(R.string.app_name), fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(16.dp))
         NameInput()
         Spacer(modifier = Modifier.height(16.dp))
         DateSelector(stringResource(R.string.age))
@@ -47,8 +50,7 @@ fun DetailsPage(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(16.dp)
                 .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
+                    interactionSource = remember { MutableInteractionSource() }, indication = null
                 ) {
                     //TODO add image picker
                 })
