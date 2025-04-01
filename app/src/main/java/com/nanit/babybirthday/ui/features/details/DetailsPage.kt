@@ -1,4 +1,4 @@
-package com.nanit.babybirthday.ui
+package com.nanit.babybirthday.ui.features.details
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
