@@ -1,10 +1,5 @@
 package com.nanit.babybirthday.ui.features.details
 
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,11 +40,8 @@ fun DetailsPage(modifier: Modifier = Modifier) {
         DateSelector(stringResource(R.string.age))
         Spacer(modifier = Modifier.height(16.dp))
         OverlappingCircularImagesOn45Degrees(
-            image = painterResource(id = R.drawable.image_paceholder_yellow),
+            placeholder = painterResource(id = R.drawable.image_paceholder_yellow),
             overlappingImage = painterResource(id = R.drawable.add_image_yellow),
-            onImageSelected = {
-                Log.d("imgpicker","Picked image: $it")
-            },
             modifier = Modifier
                 .padding(16.dp))
         Spacer(modifier = Modifier.height(16.dp))

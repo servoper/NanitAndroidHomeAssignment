@@ -61,6 +61,8 @@ dependencies {
 
     implementation(libs.androidx.datastore)
 
+    implementation(libs.coil.compose)
+
     testImplementation(libs.koin.test.junit4)
     testImplementation(libs.junit)
 

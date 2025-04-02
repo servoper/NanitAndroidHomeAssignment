@@ -27,35 +27,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
+import coil3.compose.AsyncImage
+import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.createImageUri
 import com.nanit.babybirthday.ui.pxToDp
 import kotlin.math.sqrt
 
 @Composable
 fun OverlappingCircularImagesOn45Degrees(
-    image: Painter,
+    placeholder: Painter,
     overlappingImage: Painter,
-    onImageSelected: (uri: Uri) -> Unit,
     modifier: Modifier = Modifier,
-    size: Dp = image.intrinsicSize.height.pxToDp(),
+    size: Dp = placeholder.intrinsicSize.height.pxToDp(),
     overlaySize: Dp = overlappingImage.intrinsicSize.height.pxToDp(),
     overlayOffsetX: Dp = ((sqrt(2F) - 1) * size) / (2 * sqrt(2F)) + (overlaySize / 2),
     overlayOffsetY: Dp = size - overlayOffsetX + overlaySize
 ) {
     var choosePicture by remember { mutableStateOf(false) }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     if (choosePicture) {
         CombinedImagePickerContent {
-            onImageSelected(it)
             choosePicture = false
+            selectedImageUri = it
         }
     }
+
+    val mainImageModifier = Modifier
+        .size(size)
+        .clip(CircleShape)
 
     Box(
         modifier = modifier.clickable(
@@ -63,17 +71,18 @@ fun OverlappingCircularImagesOn45Degrees(
         ) {
             choosePicture = true
         }) {
-        Image(
-            painter = image,
-            contentDescription = "Base Image",
-            modifier = Modifier
-                .size(size)
-                .clip(CircleShape)
+        AsyncImage(
+            model = selectedImageUri,
+            placeholder = placeholder,
+            error = placeholder,
+            contentScale = ContentScale.Crop,
+            contentDescription = stringResource(R.string.baby_picture),
+            modifier = mainImageModifier
         )
 
         Image(
             painter = overlappingImage,
-            contentDescription = "Overlay Image",
+            contentDescription = stringResource(R.string.choose_image),
             modifier = Modifier
                 .size(overlaySize)
                 .offset(x = size - overlayOffsetX, y = size - overlayOffsetY)
@@ -107,8 +116,8 @@ fun CombinedImagePickerContent(
     if (showDialog) {
         AlertDialog(
             properties = DialogProperties(
-            dismissOnBackPress = true, dismissOnClickOutside = true
-        ),
+                dismissOnBackPress = true, dismissOnClickOutside = true
+            ),
             onDismissRequest = { showDialog = false },
             title = { Text("Select Image Source") },
             confirmButton = {

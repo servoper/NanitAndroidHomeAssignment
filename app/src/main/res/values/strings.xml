@@ -4,4 +4,7 @@
     <string name="name">Name</string>
     <string name="age">Age</string>
     <string name="show_birthday_screen">Show birthday screen</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="baby_picture_placeholder">Baby picture placeholder</string>
+    <string name="baby_picture">Baby picture</string>
 </resources>
