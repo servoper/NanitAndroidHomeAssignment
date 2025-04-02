@@ -1,5 +1,8 @@
 package com.nanit.babybirthday.ui.features.details
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -30,9 +33,6 @@ import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
 
 @Composable
 fun DetailsPage(modifier: Modifier = Modifier) {
-    var showToast by remember {
-        mutableStateOf(false)
-    }
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,13 +47,11 @@ fun DetailsPage(modifier: Modifier = Modifier) {
         OverlappingCircularImagesOn45Degrees(
             image = painterResource(id = R.drawable.image_paceholder_yellow),
             overlappingImage = painterResource(id = R.drawable.add_image_yellow),
+            onImageSelected = {
+                Log.d("imgpicker","Picked image: $it")
+            },
             modifier = Modifier
-                .padding(16.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() }, indication = null
-                ) {
-                    //TODO add image picker
-                })
+                .padding(16.dp))
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             // TODO show next screen
