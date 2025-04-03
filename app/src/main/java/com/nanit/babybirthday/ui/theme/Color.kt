@@ -14,5 +14,7 @@ val Yellow20 = Color(0XFFFEEECB) // Used for page background
 val Yellow40 = Color(0xC7FEBE21) // Used for border
 
 val Blue20 = Color(0xFFDAF1F6) // Used for page background
+val Blue40 = Color(0xC78BD3E4)  // Used for border
 
 val Green20 = Color(0xFFC5E8DF) // Used for page background
+val Green40 = Color(0xC76FC5AF)  // Used for border

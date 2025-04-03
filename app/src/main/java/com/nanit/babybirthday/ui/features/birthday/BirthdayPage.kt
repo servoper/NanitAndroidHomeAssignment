@@ -24,19 +24,19 @@ import androidx.compose.ui.unit.dp
 import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.common.OverlappingCircularImagesOn45Degrees
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayState
-import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayUiEvent
 import com.nanit.babybirthday.ui.theme.AgeDrawableResource
 import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
+import com.nanit.babybirthday.ui.theme.NanitBlueTheme
+import com.nanit.babybirthday.ui.theme.NanitTheme
 import com.nanit.babybirthday.ui.theme.Typography
-import com.nanit.babybirthday.ui.theme.Yellow20
-import com.nanit.babybirthday.ui.theme.Yellow40
 
 @Composable
 fun BirthdayPage(
+    nanitTheme: NanitTheme,
     state: BirthdayState, modifier: Modifier = Modifier
 ) {
 
-    Box(modifier = Modifier.background(Yellow20)) {
+    Box(modifier = Modifier.background(nanitTheme.getBackgroundColor())) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -95,14 +95,14 @@ fun BirthdayPage(
             }
 
             OverlappingCircularImagesOn45Degrees(
-                placeholder = painterResource(id = R.drawable.image_paceholder_yellow),
-                overlappingImage = painterResource(id = R.drawable.add_image_yellow),
+                placeholder = painterResource(id = nanitTheme.getBabyImagePlaceholderResource()),
+                overlappingImage = painterResource(id = nanitTheme.getAddImageResource()),
                 selectedImageUri = state.picture,
-                borderColor = Yellow40,
+                borderColor = nanitTheme.getBabyImageBorderColor(),
             )
         }
         Image(
-            painter = painterResource(id = R.drawable.bg_yellow),
+            painter = painterResource(id = nanitTheme.getOverlayResource()),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -124,6 +124,9 @@ fun BirthdayPage(
 @Composable
 fun GreetingPreview() {
     NanitBabyBirthdayTheme {
-        BirthdayPage(BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0))
+        BirthdayPage(
+            nanitTheme = NanitBlueTheme(),
+            BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0)
+        )
     }
 }

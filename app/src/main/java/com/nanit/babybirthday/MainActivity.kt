@@ -11,11 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.nanit.babybirthday.ui.features.birthday.BirthdayPage
 import com.nanit.babybirthday.ui.features.details.DetailsPage
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayUiEvent
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayViewModel
 import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
+import com.nanit.babybirthday.ui.theme.NanitBlueTheme
+import com.nanit.babybirthday.ui.theme.NanitGreenTheme
+import com.nanit.babybirthday.ui.theme.NanitYellowTheme
 import kotlinx.serialization.Serializable
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -36,9 +40,11 @@ class MainActivity : ComponentActivity() {
                             DetailsPage(
                                 viewModel.state, {
                                     when {
-                                        it is BirthdayUiEvent.GoToNextPage -> navController.navigate(
-                                            BirthdayDestination
-                                        )
+                                        it is BirthdayUiEvent.GoToNextPage -> {
+                                            navController.navigate(
+                                                BirthdayDestination((0..2).random())
+                                            )
+                                        }
 
                                         else -> viewModel.onEvent(it)
                                     }
@@ -47,10 +53,14 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     composable<BirthdayDestination> {
+                        val theme = when (it.toRoute<BirthdayDestination>().nanitTheme) {
+                            0 -> NanitBlueTheme()
+                            1 -> NanitYellowTheme()
+                            else -> NanitGreenTheme()
+                        }
                         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                             BirthdayPage(
-                                viewModel.state,
-                                modifier = Modifier.padding(innerPadding)
+                                theme, viewModel.state, modifier = Modifier.padding(innerPadding)
                             )
                         }
                     }
@@ -68,4 +78,6 @@ object DetailsDestination
 
 
 @Serializable
-object BirthdayDestination
+data class BirthdayDestination(
+    val nanitTheme: Int
+)
