@@ -29,7 +29,7 @@ fun Context.createImageUri(): Uri {
         imageFileName, ".jpg", getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
     )
     return FileProvider.getUriForFile(
-        this, "com.nanit.babybirthday.provider", // Replace with your app's file provider authority
+        this, "com.nanit.babybirthday.provider",
         image
     )
 }
