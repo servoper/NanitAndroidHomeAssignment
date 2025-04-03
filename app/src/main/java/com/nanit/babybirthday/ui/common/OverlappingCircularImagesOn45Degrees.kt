@@ -91,7 +91,6 @@ fun OverlappingCircularImagesOn45Degrees(
                 .size(size)
                 .padding(7.dp)
                 .clip(CircleShape)
-            //.border(border, borderColor, CircleShape)
         )
 
         if (onImageSelected != null) {
