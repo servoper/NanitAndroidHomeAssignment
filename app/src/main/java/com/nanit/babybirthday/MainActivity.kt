@@ -25,6 +25,8 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     DetailsPage(
+                        viewModel.state,
+                        viewModel::onEvent,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

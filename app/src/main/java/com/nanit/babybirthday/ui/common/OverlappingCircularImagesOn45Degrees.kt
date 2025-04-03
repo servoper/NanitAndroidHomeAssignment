@@ -45,6 +45,8 @@ import kotlin.math.sqrt
 fun OverlappingCircularImagesOn45Degrees(
     placeholder: Painter,
     overlappingImage: Painter,
+    selectedImageUri: Uri? = null,
+    onImageSelected: (Uri) -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = placeholder.intrinsicSize.height.pxToDp(),
     overlaySize: Dp = overlappingImage.intrinsicSize.height.pxToDp(),
@@ -52,12 +54,11 @@ fun OverlappingCircularImagesOn45Degrees(
     overlayOffsetY: Dp = size - overlayOffsetX + overlaySize
 ) {
     var choosePicture by remember { mutableStateOf(false) }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     if (choosePicture) {
         CombinedImagePickerContent {
             choosePicture = false
-            selectedImageUri = it
+            onImageSelected(it)
         }
     }
 

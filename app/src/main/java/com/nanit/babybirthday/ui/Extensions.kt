@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.core.content.FileProvider
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 @Composable
@@ -32,3 +33,7 @@ fun Context.createImageUri(): Uri {
         image
     )
 }
+
+fun Long.toDateString(): String = SimpleDateFormat.getDateInstance().format(Date(this))
+
+fun String.toMillisecondsDate(): Long? = SimpleDateFormat.getDateInstance().parse(this)?.time

@@ -7,4 +7,6 @@
     <string name="choose_image">Choose Image</string>
     <string name="baby_picture_placeholder">Baby picture placeholder</string>
     <string name="baby_picture">Baby picture</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

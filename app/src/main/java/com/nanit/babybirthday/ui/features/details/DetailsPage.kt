@@ -10,10 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,27 +20,44 @@ import androidx.compose.ui.unit.sp
 import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.common.DateSelector
 import com.nanit.babybirthday.ui.common.OverlappingCircularImagesOn45Degrees
+import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayState
+import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayUiEvent
 import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
 
 @Composable
-fun DetailsPage(modifier: Modifier = Modifier) {
+fun DetailsPage(
+    state: BirthdayState, events: (BirthdayUiEvent) -> Unit, modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(stringResource(R.string.app_name), fontSize = 18.sp)
+
         Spacer(modifier = Modifier.height(16.dp))
-        NameInput()
+
+        NameInput(state.name, onNameChanged = { events(BirthdayUiEvent.UpdateName(it)) })
+
         Spacer(modifier = Modifier.height(16.dp))
-        DateSelector(stringResource(R.string.age))
+
+        DateSelector(
+            state.dateOfBirth,
+            stringResource(R.string.age),
+            onDateSelected = { events(BirthdayUiEvent.UpdateBirthDate(it)) })
+
         Spacer(modifier = Modifier.height(16.dp))
+
         OverlappingCircularImagesOn45Degrees(
             placeholder = painterResource(id = R.drawable.image_paceholder_yellow),
             overlappingImage = painterResource(id = R.drawable.add_image_yellow),
-            modifier = Modifier
-                .padding(16.dp))
+            selectedImageUri = state.picture,
+            onImageSelected = { events(BirthdayUiEvent.UpdatePicture(it)) },
+            modifier = Modifier.padding(16.dp)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
             // TODO show next screen
         }) {
@@ -54,19 +67,17 @@ fun DetailsPage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun NameInput() {
-    var nameState by remember {
-        mutableStateOf("")
-    }
-    OutlinedTextField(value = nameState, onValueChange = {
-        nameState = it
-    }, label = { Text(stringResource(R.string.name)) })
+fun NameInput(name: String? = null, onNameChanged: (String) -> Unit) {
+    OutlinedTextField(
+        value = name ?: "",
+        onValueChange = onNameChanged,
+        label = { Text(stringResource(R.string.name)) })
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     NanitBabyBirthdayTheme {
-        DetailsPage()
+        DetailsPage(BirthdayState(), {})
     }
 }
