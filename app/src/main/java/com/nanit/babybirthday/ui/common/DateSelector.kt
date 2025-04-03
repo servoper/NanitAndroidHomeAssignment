@@ -15,38 +15,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import java.text.SimpleDateFormat
-import java.util.Date
+import androidx.compose.ui.res.stringResource
+import com.nanit.babybirthday.R
+import com.nanit.babybirthday.ui.toDateString
 
 @Composable
-fun DateSelector(label: String) {
-    var dateString by remember {
-        mutableStateOf("")
-    }
+fun DateSelector(
+    dateMilliseconds: Long? = null, label: String,
+    onDateSelected: (Long) -> Unit
+) {
 
     var showDatePicker by remember {
         mutableStateOf(false)
     }
 
-    val formatter = SimpleDateFormat.getDateInstance()
-
-    OutlinedTextField(value = dateString, onValueChange = {
-        dateString = it
-    }, interactionSource = remember { MutableInteractionSource() }.also { interactionSource ->
-        LaunchedEffect(interactionSource) {
-            interactionSource.interactions.collect {
-                if (it is PressInteraction.Release || it is PressInteraction.Cancel) {
-                    showDatePicker = true
+    OutlinedTextField(
+        value = dateMilliseconds?.toDateString() ?: "",
+        onValueChange = {},
+        interactionSource = remember { MutableInteractionSource() }.also { interactionSource ->
+            LaunchedEffect(interactionSource) {
+                interactionSource.interactions.collect {
+                    if (it is PressInteraction.Release || it is PressInteraction.Cancel) {
+                        showDatePicker = true
+                    }
                 }
             }
-        }
-    }, label = { Text(label) })
+        },
+        label = { Text(label) })
 
     if (showDatePicker) {
         DatePickerModal(onDateSelected = {
-            it?.let {
-                dateString = formatter.format(Date(it))
-            }
+            it?.let { onDateSelected(it) }
         }, onDismiss = { showDatePicker = false })
     }
 }
@@ -63,11 +62,11 @@ fun DatePickerModal(
             onDateSelected(datePickerState.selectedDateMillis)
             onDismiss()
         }) {
-            Text("OK")
+            Text(stringResource(R.string.ok))
         }
     }, dismissButton = {
         TextButton(onClick = onDismiss) {
-            Text("Cancel")
+            Text(stringResource(R.string.cancel))
         }
     }) {
         DatePicker(state = datePickerState)
