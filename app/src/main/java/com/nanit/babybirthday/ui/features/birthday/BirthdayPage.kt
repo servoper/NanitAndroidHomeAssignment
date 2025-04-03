@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +35,12 @@ import com.nanit.babybirthday.ui.theme.Typography
 @Composable
 fun BirthdayPage(
     nanitTheme: NanitTheme,
-    state: BirthdayState, events: (BirthdayUiEvent) -> Unit, modifier: Modifier = Modifier
+    state: BirthdayState,
+    shareRequested: Boolean,
+    onShare: () -> Unit,
+    events: (BirthdayUiEvent) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     Box(modifier = Modifier.background(nanitTheme.getBackgroundColor())) {
         Column(
             modifier = modifier
@@ -68,9 +72,9 @@ fun BirthdayPage(
                     )
                     Image(
                         painter = painterResource(
-                            id = (if (state.years > 0)
-                                AgeDrawableResource.getDrawable(state.years) else
-                                AgeDrawableResource.getDrawable(state.months)).drawable
+                            id = (if (state.years > 0) AgeDrawableResource.getDrawable(state.years) else AgeDrawableResource.getDrawable(
+                                state.months
+                            )).drawable
                         ),
                         contentDescription = null,
                         modifier = Modifier.padding(horizontal = 22.dp),
@@ -84,13 +88,12 @@ fun BirthdayPage(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
-                    (if (state.years > 0)
-                        pluralStringResource(id = R.plurals.year_old, count = state.years)
-                    else
-                        pluralStringResource(
-                            id = R.plurals.month_old,
-                            count = state.months
-                        )).uppercase(),
+                    (if (state.years > 0) pluralStringResource(
+                        id = R.plurals.year_old, count = state.years
+                    )
+                    else pluralStringResource(
+                        id = R.plurals.month_old, count = state.months
+                    )).uppercase(),
                     style = Typography.titleLarge,
                 )
             }
@@ -119,6 +122,21 @@ fun BirthdayPage(
                 .padding(bottom = 110.dp)
                 .align(Alignment.BottomCenter)
         )
+
+        if (!shareRequested) {
+            TextButton(
+                onClick = {
+                    onShare()
+                }, modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Image(
+                    painter = painterResource(id = android.R.drawable.ic_menu_share),
+                    contentDescription = "Share",
+                    modifier = Modifier.padding(top = 60.dp, end = 30.dp)
+                )
+            }
+        }
+
     }
 }
 
@@ -128,7 +146,9 @@ fun GreetingPreview() {
     NanitBabyBirthdayTheme {
         BirthdayPage(
             nanitTheme = NanitBlueTheme(),
-            BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0), {}
-        )
+            BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0),
+            false,
+            {},
+            {})
     }
 }
