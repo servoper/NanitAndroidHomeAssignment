@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.common.OverlappingCircularImagesOn45Degrees
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayState
+import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayUiEvent
 import com.nanit.babybirthday.ui.theme.AgeDrawableResource
 import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
 import com.nanit.babybirthday.ui.theme.NanitBlueTheme
@@ -32,7 +33,7 @@ import com.nanit.babybirthday.ui.theme.Typography
 
 @Composable
 fun BirthdayPage(
-    nanitTheme: NanitTheme,
+    nanitTheme: NanitTheme, events: (BirthdayUiEvent) -> Unit,
     state: BirthdayState, modifier: Modifier = Modifier
 ) {
 
@@ -98,6 +99,7 @@ fun BirthdayPage(
                 placeholder = painterResource(id = nanitTheme.getBabyImagePlaceholderResource()),
                 overlappingImage = painterResource(id = nanitTheme.getAddImageResource()),
                 selectedImageUri = state.picture,
+                onImageSelected = { events(BirthdayUiEvent.UpdatePicture(it)) },
                 borderColor = nanitTheme.getBabyImageBorderColor(),
             )
         }
@@ -125,8 +127,8 @@ fun BirthdayPage(
 fun GreetingPreview() {
     NanitBabyBirthdayTheme {
         BirthdayPage(
-            nanitTheme = NanitBlueTheme(),
-            BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0)
+            nanitTheme = NanitBlueTheme(), {},
+            BirthdayState(name = "Christiano Ronaldo", years = 2, months = 0),
         )
     }
 }

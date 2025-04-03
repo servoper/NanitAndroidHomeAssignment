@@ -60,7 +60,10 @@ class MainActivity : ComponentActivity() {
                         }
                         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                             BirthdayPage(
-                                theme, viewModel.state, modifier = Modifier.padding(innerPadding)
+                                theme,
+                                viewModel::onEvent,
+                                viewModel.state,
+                                modifier = Modifier.padding(innerPadding)
                             )
                         }
                     }
