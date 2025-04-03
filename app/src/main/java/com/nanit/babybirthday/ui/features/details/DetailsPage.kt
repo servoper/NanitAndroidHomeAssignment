@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +24,7 @@ import com.nanit.babybirthday.ui.common.OverlappingCircularImagesOn45Degrees
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayState
 import com.nanit.babybirthday.ui.features.globalviewmodels.BirthdayUiEvent
 import com.nanit.babybirthday.ui.theme.NanitBabyBirthdayTheme
+import com.nanit.babybirthday.ui.theme.Yellow40
 
 @Composable
 fun DetailsPage(
@@ -51,6 +53,7 @@ fun DetailsPage(
         OverlappingCircularImagesOn45Degrees(
             placeholder = painterResource(id = R.drawable.image_paceholder_yellow),
             overlappingImage = painterResource(id = R.drawable.add_image_yellow),
+            borderColor = Yellow40,
             selectedImageUri = state.picture,
             onImageSelected = { events(BirthdayUiEvent.UpdatePicture(it)) },
             modifier = Modifier.padding(16.dp)
@@ -59,7 +62,7 @@ fun DetailsPage(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            // TODO show next screen
+            events(BirthdayUiEvent.GoToNextPage)
         }) {
             Text(stringResource(R.string.show_birthday_screen))
         }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +40,7 @@ import androidx.core.content.ContextCompat
 import coil3.compose.AsyncImage
 import com.nanit.babybirthday.R
 import com.nanit.babybirthday.ui.createImageUri
+import com.nanit.babybirthday.ui.dpToPx
 import com.nanit.babybirthday.ui.pxToDp
 import kotlin.math.sqrt
 
@@ -46,7 +49,8 @@ fun OverlappingCircularImagesOn45Degrees(
     placeholder: Painter,
     overlappingImage: Painter,
     selectedImageUri: Uri? = null,
-    onImageSelected: (Uri) -> Unit,
+    onImageSelected: ((Uri) -> Unit)? = null,
+    borderColor: Color,
     modifier: Modifier = Modifier,
     size: Dp = placeholder.intrinsicSize.height.pxToDp(),
     overlaySize: Dp = overlappingImage.intrinsicSize.height.pxToDp(),
@@ -55,41 +59,52 @@ fun OverlappingCircularImagesOn45Degrees(
 ) {
     var choosePicture by remember { mutableStateOf(false) }
 
-    if (choosePicture) {
+    if (choosePicture && onImageSelected != null) {
         CombinedImagePickerContent {
             choosePicture = false
             onImageSelected(it)
         }
     }
 
-    val mainImageModifier = Modifier
-        .size(size)
-        .clip(CircleShape)
+    val borderRadius = (size / 2).dpToPx()
 
     Box(
-        modifier = modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() }, indication = null
-        ) {
-            choosePicture = true
-        }) {
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() }, indication = null
+            ) {
+                choosePicture = true
+            }
+            .drawBehind {
+                drawCircle(
+                    color = borderColor,
+                    radius = borderRadius,
+                )
+            }) {
         AsyncImage(
             model = selectedImageUri,
             placeholder = placeholder,
             error = placeholder,
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(R.string.baby_picture),
-            modifier = mainImageModifier
+            modifier = Modifier
+                .size(size)
+                .padding(7.dp)
+                .clip(CircleShape)
+            //.border(border, borderColor, CircleShape)
         )
 
-        Image(
-            painter = overlappingImage,
-            contentDescription = stringResource(R.string.choose_image),
-            modifier = Modifier
-                .size(overlaySize)
-                .offset(x = size - overlayOffsetX, y = size - overlayOffsetY)
-                .clip(CircleShape)
-                .border(1.dp, Color.White, CircleShape)
-        )
+        if (onImageSelected != null) {
+            Image(
+                painter = overlappingImage,
+                contentDescription = stringResource(R.string.choose_image),
+                modifier = Modifier
+                    .size(overlaySize)
+                    .offset(x = size - overlayOffsetX, y = size - overlayOffsetY)
+                    .clip(CircleShape)
+                    .border(1.dp, Color.White, CircleShape)
+            )
+        }
     }
 }
 

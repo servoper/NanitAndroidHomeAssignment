@@ -9,4 +9,13 @@
     <string name="baby_picture">Baby picture</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="yout_baby_today_is">Today %1$s is</string>
+    <plurals name="year_old">
+        <item quantity="one">year old!</item>
+        <item quantity="other">years old!</item>
+    </plurals>
+    <plurals name="month_old">
+        <item quantity="one">month old!</item>
+        <item quantity="other">months old!</item>
+    </plurals>
 </resources>

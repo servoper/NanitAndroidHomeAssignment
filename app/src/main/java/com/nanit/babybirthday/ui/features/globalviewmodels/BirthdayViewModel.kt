@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 private const val TAG = "BirthdayViewModel"
 
@@ -45,8 +46,22 @@ class BirthdayViewModel(private val repository: BabyRepository) : ViewModel() {
     private fun getBaby() {
         viewModelScope.launch {
             repository.getBaby().collect {
+                var years = 0
+                var months = 0
+
+                it?.dateOfBirth?.let { time ->
+                    val calendar = Calendar.getInstance()
+                    calendar.timeInMillis -= time
+                    years = calendar.get(Calendar.YEAR) - 1970
+                    months = calendar.get(Calendar.MONTH)
+                }
+
                 if (it != null) state = state.copy(
-                    name = it.name, dateOfBirth = it.dateOfBirth, picture = it.picture?.toUri()
+                    name = it.name,
+                    dateOfBirth = it.dateOfBirth,
+                    years = years,
+                    months = months,
+                    picture = it.picture?.toUri()
                 )
             }
         }
@@ -88,7 +103,11 @@ class BirthdayViewModel(private val repository: BabyRepository) : ViewModel() {
 }
 
 data class BirthdayState(
-    val name: String = "", val dateOfBirth: Long? = null, val picture: Uri? = null
+    val name: String = "",
+    val dateOfBirth: Long? = null,
+    val years: Int = 0,
+    val months: Int = 0,
+    val picture: Uri? = null
 )
 
 sealed interface BirthdayUiEvent {
